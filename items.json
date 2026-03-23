@@ -1,0 +1,18 @@
+[
+  {
+    "abstract": "ab_resource_converter_base",
+    "type": "TOOL",
+    "name": { "str": "资源转换机界面" },
+    "description": "资源转换机的虚拟控制界面。如果你直接看见这个物品，说明家具绑定出现了问题。",
+    "symbol": "@",
+    "color": "red"
+  },
+  {
+    "id": "ab_resource_converter_terminal",
+    "copy-from": "ab_resource_converter_base",
+    "type": "TOOL",
+    "name": { "str": "资源转换机终端" },
+    "description": "供资源转换机家具调用的虚拟终端。",
+    "use_action": "AB_RESOURCE_CONVERTER_MENU"
+  }
+]

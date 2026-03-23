@@ -1,0 +1,35 @@
+[
+  {
+    "type": "construction_group",
+    "id": "ab_resource_converter_build",
+    "name": "搭建资源转换机"
+  },
+  {
+    "type": "construction",
+    "id": "constr_ab_resource_converter",
+    "group": "ab_resource_converter_build",
+    "category": "WORKSHOP",
+    "required_skills": [ [ "electronics", 4 ], [ "fabrication", 5 ] ],
+    "time": "90 m",
+    "qualities": [
+      [ { "id": "HAMMER", "level": 2 } ],
+      [ { "id": "SAW_M", "level": 1 } ],
+      [ { "id": "SCREW", "level": 1 } ],
+      [ { "id": "WRENCH", "level": 1 } ]
+    ],
+    "using": [ [ "soldering_standard", 20 ] ],
+    "components": [
+      [ [ "sheet_metal", 6 ] ],
+      [ [ "steel_chunk", 4 ], [ "steel_lump", 2 ] ],
+      [ [ "scrap", 40 ] ],
+      [ [ "cable", 20 ] ],
+      [ [ "processor", 2 ] ],
+      [ [ "power_supply", 2 ] ],
+      [ [ "amplifier", 1 ] ],
+      [ [ "storage_battery", 1 ] ],
+      [ [ "control_laptop", 1 ] ]
+    ],
+    "pre_special": "check_empty",
+    "post_furniture": "f_ab_resource_converter"
+  }
+]

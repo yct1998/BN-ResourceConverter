@@ -1,0 +1,663 @@
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: ab_resource_converter\n"
+"POT-Creation-Date: 2026-03-23 19:29+0800\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: .\constructions.json
+msgid "搭建资源转换机"
+msgstr ""
+
+#: .\furniture.json .\main.lua
+msgid "资源转换机"
+msgstr ""
+
+#. ~ Description for 资源转换机
+#: .\furniture.json
+msgid "不知道什么原理，由旧式工业机柜、处理器、屏幕与供电模块拼装而成的资源转换机。它能扫描周围一格内的物品并回收成钱，还可以将钱转换成物品。"
+msgstr ""
+
+#: .\furniture.json
+msgid "metal screeching!"
+msgstr ""
+
+#: .\furniture.json
+msgid "clang!"
+msgstr ""
+
+#: .\generated_catalog.lua
+msgid "枪械、弓弩与其他远程武器。"
+msgstr ""
+
+#: .\generated_catalog.lua
+msgid "枪械与远程"
+msgstr ""
+
+#: .\generated_catalog.lua
+msgid "子弹、电池、燃料弹药与可堆叠弹药。"
+msgstr ""
+
+#: .\generated_catalog.lua
+msgid "弹药"
+msgstr ""
+
+#: .\generated_catalog.lua
+msgid "弹匣、供弹机构与相关附件。"
+msgstr ""
+
+#: .\generated_catalog.lua
+msgid "弹匣与供弹"
+msgstr ""
+
+#: .\generated_catalog.lua
+msgid "护具、服装、携行穿戴与宠物护甲。"
+msgstr ""
+
+#: .\generated_catalog.lua
+msgid "护甲与穿戴"
+msgstr ""
+
+#: .\generated_catalog.lua
+msgid "常规工具、电子设备与可激活装置。"
+msgstr ""
+
+#: .\generated_catalog.lua
+msgid "工具与电子"
+msgstr ""
+
+#: .\generated_catalog.lua
+msgid "食物、饮料、药品和一般消耗品。"
+msgstr ""
+
+#: .\generated_catalog.lua
+msgid "食物与药品"
+msgstr ""
+
+#: .\generated_catalog.lua
+msgid "配方书、技能书与其他读物。"
+msgstr ""
+
+#: .\generated_catalog.lua
+msgid "书籍与资料"
+msgstr ""
+
+#: .\generated_catalog.lua
+msgid "原料、燃料、制造材料与通用零件。"
+msgstr ""
+
+#: .\generated_catalog.lua
+msgid "材料与零件"
+msgstr ""
+
+#: .\generated_catalog.lua
+msgid "车辆零件、发动机、轮组与车载结构件。"
+msgstr ""
+
+#: .\generated_catalog.lua
+msgid "车辆部件"
+msgstr ""
+
+#: .\generated_catalog.lua
+msgid "仿生安装物与高级技术物资。"
+msgstr ""
+
+#: .\generated_catalog.lua
+msgid "仿生与高科技"
+msgstr ""
+
+#: .\generated_catalog.lua
+msgid "其余可购买、可回收但不适合归入上列分类的物品。"
+msgstr ""
+
+#: .\generated_catalog.lua
+msgid "其他杂项"
+msgstr ""
+
+#: .\items.json
+msgid "资源转换机界面"
+msgid_plural "资源转换机界面s"
+msgstr[0] ""
+msgstr[1] ""
+
+#. ~ Description for {'str': '资源转换机界面'}
+#: .\items.json
+msgid "资源转换机的虚拟控制界面。如果你直接看见这个物品，说明家具绑定出现了问题。"
+msgstr ""
+
+#: .\items.json
+msgid "资源转换机终端"
+msgid_plural "资源转换机终端s"
+msgstr[0] ""
+msgstr[1] ""
+
+#. ~ Description for {'str': '资源转换机终端'}
+#: .\items.json
+msgid "供资源转换机家具调用的虚拟终端。"
+msgstr ""
+
+#: .\iuse.json
+msgid "启动资源转换机"
+msgstr ""
+
+#: .\main.lua
+msgid "未知物品"
+msgstr ""
+
+#: .\main.lua
+msgid "价格"
+msgstr ""
+
+#: .\main.lua
+msgid "字母"
+msgstr ""
+
+#: .\main.lua
+msgid "机器周围一格内没有找到可回收物品。"
+msgstr ""
+
+#: .\main.lua
+#, c-format
+msgid "%s扫描完成。"
+msgstr ""
+
+#: .\main.lua
+#, c-format
+msgid "可回收物品数量: <color_yellow>%d</color>"
+msgstr ""
+
+#: .\main.lua
+#, c-format
+msgid "当前回收倍率: %s"
+msgstr ""
+
+#: .\main.lua
+#, c-format
+msgid "预计入账金额: %s"
+msgstr ""
+
+#: .\main.lua
+msgid "价格规则: 目录原价 × 回收倍率；未收录或价格为 0 的物品保底 $0.01。"
+msgstr ""
+
+#: .\main.lua
+msgid "回收预览:"
+msgstr ""
+
+#: .\main.lua
+#, c-format
+msgid "%d. %s -> %s"
+msgstr ""
+
+#: .\main.lua
+#, c-format
+msgid "……其余 %d 项将在确认后一并处理。"
+msgstr ""
+
+#: .\main.lua
+msgid "启动回收程序？"
+msgstr ""
+
+#: .\main.lua
+#, c-format
+msgid "%s回收中 (%s)"
+msgstr ""
+
+#: .\main.lua
+#, c-format
+msgid "%s已完成回收，%d 件物品折算入账 %s。"
+msgstr ""
+
+#: .\main.lua
+msgid "该物品当前没有可用的转换价格。"
+msgstr ""
+
+#: .\main.lua
+#, c-format
+msgid ""
+"银行账户余额不足。\n"
+"\n"
+"当前余额: %s\n"
+"所需金额: %s"
+msgstr ""
+
+#: .\main.lua
+#, c-format
+msgid "%d 件"
+msgstr ""
+
+#: .\main.lua
+#, c-format
+msgid "%d 份标准包（每份 %d 单位）"
+msgstr ""
+
+#: .\main.lua
+#, c-format
+msgid ""
+"确认转换以下物品？\n"
+"\n"
+"物品: %s\n"
+"数量: %s\n"
+"基础价格: %s\n"
+"当前转换倍率: %s\n"
+"转换价: %s\n"
+"支付后余额: %s"
+msgstr ""
+
+#: .\main.lua
+msgid "转换失败：目标物品未能生成。"
+msgstr ""
+
+#: .\main.lua
+#, c-format
+msgid "已成功转换: %s"
+msgstr ""
+
+#: .\main.lua
+#, c-format
+msgid "到账数量: %d 份"
+msgstr ""
+
+#: .\main.lua
+#, c-format
+msgid "实际扣款: %s"
+msgstr ""
+
+#: .\main.lua
+#, c-format
+msgid "剩余余额: %s"
+msgstr ""
+
+#: .\main.lua
+#, c-format
+msgid "其中 %d 份因背包空间不足掉落在你脚边。"
+msgstr ""
+
+#: .\main.lua
+#, c-format
+msgid ""
+"输入购买件数。\n"
+"当前转换倍率: %s"
+msgstr ""
+
+#: .\main.lua
+#, c-format
+msgid ""
+"输入购买份数。\n"
+"每份会生成 %d 单位。\n"
+"当前转换倍率: %s"
+msgstr ""
+
+#: .\main.lua
+#, c-format
+msgid "输入 %s 的购买数量"
+msgstr ""
+
+#: .\main.lua
+msgid "未找到该物品的目录数据。"
+msgstr ""
+
+#: .\main.lua
+msgid "未分类"
+msgstr ""
+
+#: .\main.lua
+msgid "1 件 / 份"
+msgstr ""
+
+#: .\main.lua
+#, c-format
+msgid "%d 单位 / 份"
+msgstr ""
+
+#: .\main.lua
+#, c-format
+msgid ""
+"银行余额: %s\n"
+"分类: %s\n"
+"类型: %s\n"
+"标准份额: %s\n"
+"基础价格: %s\n"
+"当前转换倍率: %s\n"
+"当前回收倍率: %s\n"
+"当前转换价: %s\n"
+"当前回收价: %s\n"
+"重量: %s\n"
+"体积: %s\n"
+"来源: %s\n"
+"\n"
+"%s"
+msgstr ""
+
+#: .\main.lua
+msgid "未知"
+msgstr ""
+
+#: .\main.lua
+msgid "没有额外描述。"
+msgstr ""
+
+#: .\main.lua
+#, c-format
+msgid "转换 1 份 (%s)"
+msgstr ""
+
+#: .\main.lua
+#, c-format
+msgid "转换 5 份 (%s)"
+msgstr ""
+
+#: .\main.lua
+msgid "自定义数量"
+msgstr ""
+
+#: .\main.lua
+msgid "返回"
+msgstr ""
+
+#: .\main.lua
+msgid "没有找到可显示的物品。"
+msgstr ""
+
+#: .\main.lua
+#, c-format
+msgid "%s [%d/%d]"
+msgstr ""
+
+#: .\main.lua
+#, c-format
+msgid ""
+"银行余额: %s\n"
+"排序: %s\n"
+"%s\n"
+"当前页项目: %d - %d / %d"
+msgstr ""
+
+#: .\main.lua
+#, c-format
+msgid "切换排序：%s"
+msgstr ""
+
+#: .\main.lua
+msgid "上一页"
+msgstr ""
+
+#: .\main.lua
+msgid "下一页"
+msgstr ""
+
+#: .\main.lua
+#, c-format
+msgid "%s - %s"
+msgstr ""
+
+#: .\main.lua
+msgid "搜索物品"
+msgstr ""
+
+#: .\main.lua
+msgid "输入物品名称或 ID 关键词。"
+msgstr ""
+
+#: .\main.lua
+msgid "当前环境没有可用的文本输入框，或你取消了搜索输入。"
+msgstr ""
+
+#: .\main.lua
+#, c-format
+msgid "没有找到与“%s”匹配的物品。"
+msgstr ""
+
+#: .\main.lua
+#, c-format
+msgid "搜索结果: %s"
+msgstr ""
+
+#: .\main.lua
+#, c-format
+msgid "共找到 %d 个匹配项。"
+msgstr ""
+
+#: .\main.lua
+msgid "返回分类页"
+msgstr ""
+
+#: .\main.lua
+msgid "这个分类当前没有可转换的物品。"
+msgstr ""
+
+#: .\main.lua
+msgid "返回分类列表"
+msgstr ""
+
+#: .\main.lua
+msgid "设置回收倍率（百分比）"
+msgstr ""
+
+#: .\main.lua
+#, c-format
+msgid ""
+"当前回收倍率: %s\n"
+"例如输入 50 表示 0.50"
+msgstr ""
+
+#: .\main.lua
+msgid "设置转换倍率（百分比）"
+msgstr ""
+
+#: .\main.lua
+#, c-format
+msgid ""
+"当前转换倍率: %s\n"
+"例如输入 200 表示 2.00"
+msgstr ""
+
+#: .\main.lua
+#, c-format
+msgid ""
+"倍率已更新。\n"
+"\n"
+"回收倍率: %s\n"
+"转换倍率: %s"
+msgstr ""
+
+#: .\main.lua
+msgid ""
+"资源目录尚未生成。\n"
+"\n"
+"请先运行 mod 内附脚本生成 generated_catalog.lua、generated_catalog_category_items.lua 与 generated_catalog_items.lua。"
+msgstr ""
+
+#: .\main.lua
+msgid "转换物品"
+msgstr ""
+
+#: .\main.lua
+#, c-format
+msgid ""
+"银行余额: %s\n"
+"当前转换倍率: %s\n"
+"当前回收倍率: %s\n"
+"请选择操作。"
+msgstr ""
+
+#: .\main.lua
+msgid "按物品名称或 ID 搜索全部目录。"
+msgstr ""
+
+#: .\main.lua
+msgid "设置倍率"
+msgstr ""
+
+#: .\main.lua
+msgid "手动设置回收倍率与转换倍率。默认回收 0.50，转换 2.00。"
+msgstr ""
+
+#: .\main.lua
+#, c-format
+msgid "%s (%d)"
+msgstr ""
+
+#: .\main.lua
+msgid "返回主界面"
+msgstr ""
+
+#: .\main.lua
+#, c-format
+msgid "%s / 设备介绍"
+msgstr ""
+
+#: .\main.lua
+msgid "主界面共 3 个入口:"
+msgstr ""
+
+#: .\main.lua
+msgid "1. 回收物品：扫描机器周围一格（8 个相邻地格）内的物品。"
+msgstr ""
+
+#: .\main.lua
+msgid "2. 转换物品：分类，可搜索，可选具体物品并输入购买数量。"
+msgstr ""
+
+#: .\main.lua
+msgid "3. 设备介绍：查看公式、目录格式与当前存档统计。"
+msgstr ""
+
+#: .\main.lua
+msgid "价格规则:"
+msgstr ""
+
+#: .\main.lua
+msgid "- 目录中保存的是提取到的基础价格。"
+msgstr ""
+
+#: .\main.lua
+msgid "- 实际回收价 = 基础价格 × 回收倍率"
+msgstr ""
+
+#: .\main.lua
+msgid "- 实际转换价 = 基础价格 × 转换倍率"
+msgstr ""
+
+#: .\main.lua
+msgid "- 未收录或价格为 0 的物品，回收保底按 $0.01 处理"
+msgstr ""
+
+#: .\main.lua
+msgid "- 默认回收倍率 = 0.50"
+msgstr ""
+
+#: .\main.lua
+msgid "- 默认转换倍率 = 2.00"
+msgstr ""
+
+#: .\main.lua
+msgid "- 金额直接写入 / 扣除角色银行账户余额（cash）"
+msgstr ""
+
+#: .\main.lua
+msgid "目录格式:"
+msgstr ""
+
+#: .\main.lua
+msgid "- generated_catalog.lua: 分类元数据"
+msgstr ""
+
+#: .\main.lua
+msgid "- generated_catalog_category_items.lua: category_items 分类索引表"
+msgstr ""
+
+#: .\main.lua
+msgid "- generated_catalog_items.lua: Python 提取出的独立物品数据表"
+msgstr ""
+
+#: .\main.lua
+#, c-format
+msgid "目录规模: %d 个分类 / %d 件物品"
+msgstr ""
+
+#: .\main.lua
+#, c-format
+msgid "目录生成时间: %s"
+msgstr ""
+
+#: .\main.lua
+#, c-format
+msgid "目录来源根路径: %s"
+msgstr ""
+
+#: .\main.lua
+#, c-format
+msgid "当前转换倍率: %s"
+msgstr ""
+
+#: .\main.lua
+#, c-format
+msgid "当前列表排序: %s"
+msgstr ""
+
+#: .\main.lua
+#, c-format
+msgid "累计回收件数: %d"
+msgstr ""
+
+#: .\main.lua
+#, c-format
+msgid "累计回收入账: %s"
+msgstr ""
+
+#: .\main.lua
+#, c-format
+msgid "累计转换份数: %d"
+msgstr ""
+
+#: .\main.lua
+#, c-format
+msgid "累计转换支出: %s"
+msgstr ""
+
+#: .\main.lua
+#, c-format
+msgid ""
+"银行余额: %s\n"
+"资源目录: %d 个分类 / %d 件物品\n"
+"回收倍率: %s\n"
+"转换倍率: %s\n"
+"请选择功能。"
+msgstr ""
+
+#: .\main.lua
+msgid "回收物品"
+msgstr ""
+
+#: .\main.lua
+msgid "读取并回收机器周围一格内的所有物品；价格为 0 的物品也会保底按 $0.01 回收。"
+msgstr ""
+
+#: .\main.lua
+msgid "打开分类目录，可先搜索，再按“基础价格 × 转换倍率”转换出基础游戏物品。"
+msgstr ""
+
+#: .\main.lua
+msgid "设备介绍"
+msgstr ""
+
+#: .\main.lua
+msgid "查看三大界面说明、价格公式、目录格式与当前存档统计。"
+msgstr ""
+
+#: .\main.lua
+msgid "关闭"
+msgstr ""
+
+#: .\modinfo.json
+msgid "<color_light_cyan>资源转换机</color>"
+msgstr ""
+
+#. ~ Description for <color_light_cyan>资源转换机</color>
+#: .\modinfo.json
+msgid "添加一台可建造的资源转换机。它可以回收机器周围一格的物品并把金额计入银行账号，你能购买游戏本体中的大部分物品。"
+msgstr ""
