@@ -15,6 +15,7 @@ BUYABLE_TYPES = {
     "BIONIC_ITEM",
     "BOOK",
     "COMESTIBLE",
+    "CONTAINER",
     "ENGINE",
     "GENERIC",
     "GUN",
@@ -48,6 +49,10 @@ CATEGORY_INFO = {
     "armor": {
         "name": "护甲与穿戴",
         "desc": "护具、服装、携行穿戴与宠物护甲。",
+    },
+    "containers": {
+        "name": "容器",
+        "desc": "瓶、桶、袋、壶与其他可装载物品。",
     },
     "tools": {
         "name": "工具与电子",
@@ -431,6 +436,9 @@ def classify_item(resolved: dict) -> str:
 
     if item_type in {"ARMOR", "TOOL_ARMOR", "PET_ARMOR", "BANDOLIER"}:
         return "armor"
+
+    if item_type == "CONTAINER":
+        return "containers"
 
     if item_type in {"TOOL", "TOOLMOD"}:
         return "tools"
