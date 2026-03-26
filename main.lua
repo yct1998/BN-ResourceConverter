@@ -216,18 +216,32 @@ end
 
 local function calculate_recycle_value( item, item_data )
     local minimum_value = 1
-    local base_value = item_data and get_item_recycle_price( item_data ) or minimum_value
+    local base_value = nil
+
+    if item and type( item.price ) == "function" then
+        local ok_price, raw_price = pcall( function()
+            return item:price( false )
+        end )
+        if ok_price and type( raw_price ) == "number" then
+            base_value = math.floor( raw_price )
+        end
+    end
+
+    if not base_value then
+        base_value = item_data and tonumber( item_data.price ) or minimum_value
+    end
+
+    local recycle_value = math.floor( base_value * ( tonumber( storage.recycle_multiplier ) or 0.5 ) )
 
     if item_data and item_data.stackable then
         local charges = safe_item_charges( item )
         local standard_units = get_standard_units( item_data )
-        if charges <= 0 then
-            return minimum_value
+        if charges > 0 and standard_units > 0 then
+            recycle_value = math.floor( recycle_value * ( charges / standard_units ) )
         end
-        return math.max( minimum_value, math.floor( base_value * ( charges / standard_units ) ) )
     end
 
-    return math.max( minimum_value, base_value )
+    return math.max( minimum_value, recycle_value )
 end
 
 local function collect_recyclables( machine_pos )
