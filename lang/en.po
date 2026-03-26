@@ -67,6 +67,14 @@ msgid "护甲与穿戴"
 msgstr "Armor and wearables"
 
 #: .\generated_catalog.lua
+msgid "瓶、桶、袋、壶与其他可装载物品。"
+msgstr "Bottles, buckets, bags, jars, and other loadable items."
+
+#: .\generated_catalog.lua
+msgid "容器"
+msgstr "Containers"
+
+#: .\generated_catalog.lua
 msgid "常规工具、电子设备与可激活装置。"
 msgstr "General tools, electronic devices, and activatable devices."
 
@@ -149,9 +157,29 @@ msgstr[1] "Resource Converter Terminals"
 msgid "供资源转换机家具调用的虚拟终端。"
 msgstr "A virtual terminal called by Resource Converter furniture."
 
+#: .\items.json .\main.lua
+msgid "贤者之石"
+msgid_plural "贤者之石s"
+msgstr[0] "Philosopher's Stone"
+msgstr[1] "Philosopher's Stone(s)"
+
+#. ~ Description for {'str': '贤者之石'}
+#: .\items.json
+msgid ""
+"不知道什么原理，由石头、碎木拼装而成的...宝石？它能扫描周围一格内的物品并回收成钱，还可以将钱转换成物品。这个版本被压缩进一块神秘石头里，只能处理你脚下这一格的物品。"
+msgstr ""
+"Don't know the principle, assembled from stones and broken wood... a gem? It"
+" can scan items within one tile around and recycle them into money, and also"
+" convert money back into items. This version is compressed into a mysterious"
+" stone and can only process items in the tile you're standing on."
+
 #: .\iuse.json
 msgid "启动资源转换机"
 msgstr "Start Resource Converter"
+
+#: .\iuse.json
+msgid "启动贤者之石"
+msgstr "Activate Philosopher's Stone"
 
 #: .\main.lua
 msgid "未知物品"
@@ -166,8 +194,8 @@ msgid "字母"
 msgstr "Letter"
 
 #: .\main.lua
-msgid "机器周围一格内没有找到可回收物品。"
-msgstr "No recyclable items found within one tile around the machine."
+msgid "范围内没有找到可回收物品。"
+msgstr "No recyclable items found within range."
 
 #: .\main.lua
 #, c-format
@@ -190,10 +218,10 @@ msgid "预计入账金额: %s"
 msgstr "Estimated credit amount: %s"
 
 #: .\main.lua
-msgid "价格规则: 目录原价 × 回收倍率；未收录或价格为 0 的物品保底 $0.01。"
+msgid "价格规则: 优先读取物品自身 price(false)；失败时回退到目录价格；最低保底 $0.01。"
 msgstr ""
-"Pricing rule: Catalog original price × recycle rate; items not listed or "
-"priced at 0 have a minimum value of $0.01."
+"Pricing rule: First try item's own price(false); fall back to category price"
+" if failed; minimum floor $0.01."
 
 #: .\main.lua
 msgid "回收预览:"
@@ -355,7 +383,7 @@ msgid ""
 "当前转换倍率: %s\n"
 "当前回收倍率: %s\n"
 "当前转换价: %s\n"
-"当前回收价: %s\n"
+"估算回收价: %s\n"
 "重量: %s\n"
 "体积: %s\n"
 "来源: %s\n"
@@ -365,12 +393,12 @@ msgstr ""
 "Bank balance: %s\n"
 "Category: %s\n"
 "Type: %s\n"
-"Standard portion: %s\n"
+"Standard share: %s\n"
 "Base price: %s\n"
 "Current conversion rate: %s\n"
-"Current回收 rate: %s\n"
+"Current recycling rate: %s\n"
 "Current conversion price: %s\n"
-"Current回收 price: %s\n"
+"Estimated recycling price: %s\n"
 "Weight: %s\n"
 "Volume: %s\n"
 "Source: %s\n"
@@ -583,10 +611,8 @@ msgid "主界面共 3 个入口:"
 msgstr "Main interface has 3 entrances:"
 
 #: .\main.lua
-msgid "1. 回收物品：扫描机器周围一格（8 个相邻地格）内的物品。"
-msgstr ""
-"1. Recycle items: Scan items within one tile around the machine (8 adjacent "
-"tiles)."
+msgid "1. 回收物品：扫描范围内物品并折现。"
+msgstr "1. Recycle items: Scan items within range and convert to cash."
 
 #: .\main.lua
 msgid "2. 转换物品：分类，可搜索，可选具体物品并输入购买数量。"
@@ -605,55 +631,28 @@ msgid "价格规则:"
 msgstr "Pricing rules:"
 
 #: .\main.lua
-msgid "- 目录中保存的是提取到的基础价格。"
-msgstr "- The base price stored in the catalog is the extracted base price."
+msgid "- 回收优先读取物品自身 price(false)。"
+msgstr "- Recycling prioritizes the item's own price(false)."
 
 #: .\main.lua
-msgid "- 实际回收价 = 基础价格 × 回收倍率"
-msgstr "- Actual recycle price = Base price × Recycle multiplier"
+msgid "- 实际回收价 = 物品价值 × 回收倍率。"
+msgstr "- Actual recycle value = Item value × Recycle multiplier."
 
 #: .\main.lua
-msgid "- 实际转换价 = 基础价格 × 转换倍率"
-msgstr "- Actual conversion price = Base price × Conversion multiplier"
+msgid "- 实际转换价 = 基础价格 × 转换倍率。"
+msgstr "- Actual conversion value = Base price × Conversion multiplier."
 
 #: .\main.lua
-msgid "- 未收录或价格为 0 的物品，回收保底按 $0.01 处理"
-msgstr ""
-"- Items not listed or with price 0 are guaranteed a minimum recycle value of"
-" $0.01"
+msgid "- 最低保底回收价 = $0.01。"
+msgstr "- Minimum guaranteed recycle value = $0.01."
 
 #: .\main.lua
-msgid "- 默认回收倍率 = 0.50"
-msgstr "- Default recycle multiplier = 0.50"
+msgid "- 默认回收倍率 = 0.50。"
+msgstr "- Default recycle multiplier = 0.50."
 
 #: .\main.lua
-msgid "- 默认转换倍率 = 2.00"
-msgstr "- Default conversion multiplier = 2.00"
-
-#: .\main.lua
-msgid "- 金额直接写入 / 扣除角色银行账户余额（cash）"
-msgstr ""
-"- Amounts are directly written to / deducted from the character's bank "
-"account balance (cash)"
-
-#: .\main.lua
-msgid "目录格式:"
-msgstr "Catalog format:"
-
-#: .\main.lua
-msgid "- generated_catalog.lua: 分类元数据"
-msgstr "- generated_catalog.lua: Category metadata"
-
-#: .\main.lua
-msgid "- generated_catalog_category_items.lua: category_items 分类索引表"
-msgstr ""
-"- generated_catalog_category_items.lua: category_items category index table"
-
-#: .\main.lua
-msgid "- generated_catalog_items.lua: Python 提取出的独立物品数据表"
-msgstr ""
-"- generated_catalog_items.lua: Standalone item data table extracted by "
-"Python"
+msgid "- 默认转换倍率 = 2.00。"
+msgstr "- Default conversion multiplier = 2.00."
 
 #: .\main.lua
 #, c-format
@@ -664,11 +663,6 @@ msgstr "Catalog size: %d categories / %d items"
 #, c-format
 msgid "目录生成时间: %s"
 msgstr "Catalog generation time: %s"
-
-#: .\main.lua
-#, c-format
-msgid "目录来源根路径: %s"
-msgstr "Catalog source root path: %s"
 
 #: .\main.lua
 #, c-format
@@ -720,10 +714,10 @@ msgid "回收物品"
 msgstr "Recycle Items"
 
 #: .\main.lua
-msgid "读取并回收机器周围一格内的所有物品；价格为 0 的物品也会保底按 $0.01 回收。"
+msgid "读取指定范围内的所有物品；优先按物品自身价值回收，最低保底 $0.01。"
 msgstr ""
-"Read and recycle all items within one tile around the machine; items priced "
-"at 0 will be recycled at a minimum value of $0.01."
+"Reads all items within a specified range; prioritizes recycling based on the"
+" item's own value, with a minimum guaranteed value of $0.01."
 
 #: .\main.lua
 msgid "打开分类目录，可先搜索，再按“基础价格 × 转换倍率”转换出基础游戏物品。"
@@ -751,8 +745,10 @@ msgstr "<color_light_cyan>Resource Converter</color>"
 
 #. ~ Description for <color_light_cyan>资源转换机</color>
 #: .\modinfo.json
-msgid "添加一台可建造的资源转换机。它可以回收机器周围一格的物品并把金额计入银行账号，你能购买游戏本体中的大部分物品。"
+msgid ""
+"添加一台可建造的资源转换机。它可以回收机器周围一格的物品并把金额计入银行账号，你能购买游戏本体中的大部分物品。新加了一个贤者之石，随身回收转换。"
 msgstr ""
-"Add a buildable Resource Converter. It can recycle items within one tile "
-"around the machine and credit the amount to your bank account, allowing you "
-"to purchase most items from the base game."
+"Adds a buildable resource converter. It recycles items within one tile of "
+"the machine and deposits the amount into your bank account, allowing you to "
+"purchase most items from the base game. Also adds a Philosopher's Stone for "
+"portable recycling and conversion."

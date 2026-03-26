@@ -2,7 +2,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: ab_resource_converter\n"
-"POT-Creation-Date: 2026-03-23 19:29+0800\n"
+"POT-Creation-Date: 2026-03-27 07:38+0800\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -59,6 +59,14 @@ msgstr ""
 
 #: .\generated_catalog.lua
 msgid "护甲与穿戴"
+msgstr ""
+
+#: .\generated_catalog.lua
+msgid "瓶、桶、袋、壶与其他可装载物品。"
+msgstr ""
+
+#: .\generated_catalog.lua
+msgid "容器"
 msgstr ""
 
 #: .\generated_catalog.lua
@@ -139,8 +147,24 @@ msgstr[1] ""
 msgid "供资源转换机家具调用的虚拟终端。"
 msgstr ""
 
+#: .\items.json .\main.lua
+msgid "贤者之石"
+msgid_plural "贤者之石s"
+msgstr[0] ""
+msgstr[1] ""
+
+#. ~ Description for {'str': '贤者之石'}
+#: .\items.json
+msgid ""
+"不知道什么原理，由石头、碎木拼装而成的...宝石？它能扫描周围一格内的物品并回收成钱，还可以将钱转换成物品。这个版本被压缩进一块神秘石头里，只能处理你脚下这一格的物品。"
+msgstr ""
+
 #: .\iuse.json
 msgid "启动资源转换机"
+msgstr ""
+
+#: .\iuse.json
+msgid "启动贤者之石"
 msgstr ""
 
 #: .\main.lua
@@ -156,7 +180,7 @@ msgid "字母"
 msgstr ""
 
 #: .\main.lua
-msgid "机器周围一格内没有找到可回收物品。"
+msgid "范围内没有找到可回收物品。"
 msgstr ""
 
 #: .\main.lua
@@ -180,7 +204,7 @@ msgid "预计入账金额: %s"
 msgstr ""
 
 #: .\main.lua
-msgid "价格规则: 目录原价 × 回收倍率；未收录或价格为 0 的物品保底 $0.01。"
+msgid "价格规则: 优先读取物品自身 price(false)；失败时回退到目录价格；最低保底 $0.01。"
 msgstr ""
 
 #: .\main.lua
@@ -324,7 +348,7 @@ msgid ""
 "当前转换倍率: %s\n"
 "当前回收倍率: %s\n"
 "当前转换价: %s\n"
-"当前回收价: %s\n"
+"估算回收价: %s\n"
 "重量: %s\n"
 "体积: %s\n"
 "来源: %s\n"
@@ -515,7 +539,7 @@ msgid "主界面共 3 个入口:"
 msgstr ""
 
 #: .\main.lua
-msgid "1. 回收物品：扫描机器周围一格（8 个相邻地格）内的物品。"
+msgid "1. 回收物品：扫描范围内物品并折现。"
 msgstr ""
 
 #: .\main.lua
@@ -531,47 +555,27 @@ msgid "价格规则:"
 msgstr ""
 
 #: .\main.lua
-msgid "- 目录中保存的是提取到的基础价格。"
+msgid "- 回收优先读取物品自身 price(false)。"
 msgstr ""
 
 #: .\main.lua
-msgid "- 实际回收价 = 基础价格 × 回收倍率"
+msgid "- 实际回收价 = 物品价值 × 回收倍率。"
 msgstr ""
 
 #: .\main.lua
-msgid "- 实际转换价 = 基础价格 × 转换倍率"
+msgid "- 实际转换价 = 基础价格 × 转换倍率。"
 msgstr ""
 
 #: .\main.lua
-msgid "- 未收录或价格为 0 的物品，回收保底按 $0.01 处理"
+msgid "- 最低保底回收价 = $0.01。"
 msgstr ""
 
 #: .\main.lua
-msgid "- 默认回收倍率 = 0.50"
+msgid "- 默认回收倍率 = 0.50。"
 msgstr ""
 
 #: .\main.lua
-msgid "- 默认转换倍率 = 2.00"
-msgstr ""
-
-#: .\main.lua
-msgid "- 金额直接写入 / 扣除角色银行账户余额（cash）"
-msgstr ""
-
-#: .\main.lua
-msgid "目录格式:"
-msgstr ""
-
-#: .\main.lua
-msgid "- generated_catalog.lua: 分类元数据"
-msgstr ""
-
-#: .\main.lua
-msgid "- generated_catalog_category_items.lua: category_items 分类索引表"
-msgstr ""
-
-#: .\main.lua
-msgid "- generated_catalog_items.lua: Python 提取出的独立物品数据表"
+msgid "- 默认转换倍率 = 2.00。"
 msgstr ""
 
 #: .\main.lua
@@ -582,11 +586,6 @@ msgstr ""
 #: .\main.lua
 #, c-format
 msgid "目录生成时间: %s"
-msgstr ""
-
-#: .\main.lua
-#, c-format
-msgid "目录来源根路径: %s"
 msgstr ""
 
 #: .\main.lua
@@ -634,7 +633,7 @@ msgid "回收物品"
 msgstr ""
 
 #: .\main.lua
-msgid "读取并回收机器周围一格内的所有物品；价格为 0 的物品也会保底按 $0.01 回收。"
+msgid "读取指定范围内的所有物品；优先按物品自身价值回收，最低保底 $0.01。"
 msgstr ""
 
 #: .\main.lua
@@ -659,5 +658,6 @@ msgstr ""
 
 #. ~ Description for <color_light_cyan>资源转换机</color>
 #: .\modinfo.json
-msgid "添加一台可建造的资源转换机。它可以回收机器周围一格的物品并把金额计入银行账号，你能购买游戏本体中的大部分物品。"
+msgid ""
+"添加一台可建造的资源转换机。它可以回收机器周围一格的物品并把金额计入银行账号，你能购买游戏本体中的大部分物品。新加了一个贤者之石，随身回收转换。"
 msgstr ""
