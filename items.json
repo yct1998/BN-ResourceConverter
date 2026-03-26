@@ -14,5 +14,35 @@
     "name": { "str": "资源转换机终端" },
     "description": "供资源转换机家具调用的虚拟终端。",
     "use_action": "AB_RESOURCE_CONVERTER_MENU"
+  },
+  {
+    "id": "ab_philosophers_stone",
+    "type": "TOOL",
+    "category": "tools",
+    "name": { "str": "贤者之石" },
+    "description": "不知道什么原理，由石头、碎木拼装而成的...宝石？它能扫描周围一格内的物品并回收成钱，还可以将钱转换成物品。这个版本被压缩进一块神秘石头里，只能处理你脚下这一格的物品。",
+    "weight": "220 g",
+    "volume": "250 ml",
+    "price": "120 USD",
+    "price_postapoc": "80 USD",
+    "symbol": "*",
+    "color": "light_cyan",
+    "looks_like": "ruby",
+    "material": [ "stone" ],
+    "flags": [ "ALLOWS_REMOTE_USE" ],
+    "use_action": "AB_RESOURCE_CONVERTER_STONE_MENU"
+  },
+  {
+    "type": "recipe",
+    "result": "ab_philosophers_stone",
+    "category": "CC_OTHER",
+    "subcategory": "CSC_OTHER_TOOLS",
+    "skill_used": "fabrication",
+    "skills_required": [ [ "fabrication", 0 ] ],
+    "difficulty": 0,
+    "time": "20 s",
+    "autolearn": true,
+    "qualities": [ { "id": "HAMMER", "level": 1 } ],
+    "components": [ [ [ "splinter", 2 ] ], [ [ "rock", 1 ] ] ]
   }
 ]

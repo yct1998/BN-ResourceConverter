@@ -11,4 +11,10 @@ game.iuse_functions["AB_RESOURCE_CONVERTER_MENU"] = {
     end
 }
 
+game.iuse_functions["AB_RESOURCE_CONVERTER_STONE_MENU"] = {
+    use = function( params )
+        return mod.use_stone_menu( params.user, params.item, params.pos )
+    end
+}
+
 gdebug.log_info( "AB_RESOURCE_CONVERTER: preload complete" )

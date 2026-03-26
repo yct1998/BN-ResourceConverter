@@ -30,6 +30,7 @@ local CATEGORY_ITEMS = catalog_category_items or {}
 local CATALOG_ITEMS = catalog_items or {}
 
 local MACHINE_NAME = gettext( "资源转换机" )
+local STONE_NAME = gettext( "贤者之石" )
 local RECYCLE_RADIUS = 1
 local PAGE_SIZE = 30
 
@@ -159,11 +160,6 @@ local function get_item_buy_price( item_data )
     return math.max( 0, math.floor( base_price * ( tonumber( storage.buy_multiplier ) or 2.0 ) ) )
 end
 
-local function get_item_recycle_price( item_data )
-    local base_price = tonumber( item_data and item_data.price ) or 0
-    return math.max( 0, math.floor( base_price * ( tonumber( storage.recycle_multiplier ) or 0.5 ) ) )
-end
-
 local function get_sort_mode_label( sort_mode )
     if sort_mode == "price" then
         return gettext( "价格" )
@@ -244,13 +240,14 @@ local function calculate_recycle_value( item, item_data )
     return math.max( minimum_value, recycle_value )
 end
 
-local function collect_recyclables( machine_pos )
+local function collect_recyclables( origin_pos, radius, include_origin )
     local map = gapi.get_map()
     local entries = {}
     local total_value = 0
 
-    for _, point in ipairs( map:points_in_radius( machine_pos, RECYCLE_RADIUS ) ) do
-        if point.z == machine_pos.z and not ( point.x == machine_pos.x and point.y == machine_pos.y ) then
+    for _, point in ipairs( map:points_in_radius( origin_pos, radius ) ) do
+        local is_origin = point.z == origin_pos.z and point.x == origin_pos.x and point.y == origin_pos.y
+        if point.z == origin_pos.z and ( include_origin or not is_origin ) then
             local map_stack = map:get_items_at( point )
             if map_stack then
                 local items = map_stack:items()
@@ -285,19 +282,19 @@ local function collect_recyclables( machine_pos )
     return entries, total_value
 end
 
-local function run_recycle_menu( who, machine_pos )
-    local entries, total_value = collect_recyclables( machine_pos )
+local function run_recycle_menu( who, origin_pos, radius, include_origin, source_name )
+    local entries, total_value = collect_recyclables( origin_pos, radius, include_origin )
     if #entries == 0 then
-        popup_message( gettext( "机器周围一格内没有找到可回收物品。" ) )
+        popup_message( gettext( "范围内没有找到可回收物品。" ) )
         return
     end
 
     local preview_lines = {
-        string.format( gettext( "%s扫描完成。" ), MACHINE_NAME ),
+        string.format( gettext( "%s扫描完成。" ), source_name ),
         string.format( gettext( "可回收物品数量: <color_yellow>%d</color>" ), #entries ),
         string.format( gettext( "当前回收倍率: %s" ), format_multiplier( storage.recycle_multiplier ) ),
         string.format( gettext( "预计入账金额: %s" ), format_cash( total_value, "light_green" ) ),
-        gettext( "价格规则: 目录原价 × 回收倍率；未收录或价格为 0 的物品保底 $0.01。" ),
+        gettext( "价格规则: 优先读取物品自身 price(false)；失败时回退到目录价格；最低保底 $0.01。" ),
         "",
         gettext( "回收预览:" ),
     }
@@ -333,12 +330,12 @@ local function run_recycle_menu( who, machine_pos )
         wait_moves,
         0,
         0,
-        string.format( gettext( "%s回收中 (%s)" ), MACHINE_NAME, format_cash( total_value ) )
+        string.format( gettext( "%s回收中 (%s)" ), source_name, format_cash( total_value ) )
     )
 
     gapi.add_msg(
         MsgType.good,
-        string.format( gettext( "%s已完成回收，%d 件物品折算入账 %s。" ), MACHINE_NAME, #entries, format_cash( total_value ) )
+        string.format( gettext( "%s已完成回收，%d 件物品折算入账 %s。" ), source_name, #entries, format_cash( total_value ) )
     )
 end
 
@@ -362,7 +359,7 @@ local function add_or_drop_item( who, spawn_pos, detached_item )
     return "ground"
 end
 
-local function perform_purchase( who, machine_pos, item_data, bundles )
+local function perform_purchase( who, spawn_pos, item_data, bundles )
     bundles = math.max( 1, math.floor( tonumber( bundles ) or 1 ) )
 
     local per_bundle_price = get_item_buy_price( item_data )
@@ -405,13 +402,12 @@ local function perform_purchase( who, machine_pos, item_data, bundles )
 
     local spawned_count = 0
     local dropped_count = 0
-    local player_pos = who:get_pos_ms()
 
     for _ = 1, bundles do
         local spawn_count = item_data.stackable and get_standard_units( item_data ) or 1
         local detached_item = gapi.create_item( ItypeId.new( item_data.id ), spawn_count )
         if detached_item then
-            local destination = add_or_drop_item( who, player_pos, detached_item )
+            local destination = add_or_drop_item( who, spawn_pos, detached_item )
             if destination == "ground" then
                 dropped_count = dropped_count + 1
             end
@@ -467,7 +463,7 @@ local function ask_purchase_quantity( item_data )
     return math.max( 1, quantity )
 end
 
-local function open_item_detail_menu( who, machine_pos, item_id )
+local function open_item_detail_menu( who, spawn_pos, item_id )
     local item_data = CATALOG_ITEMS[item_id]
     if not item_data then
         popup_message( gettext( "未找到该物品的目录数据。" ) )
@@ -481,13 +477,13 @@ local function open_item_detail_menu( who, machine_pos, item_id )
 
     while true do
         local buy_price = get_item_buy_price( item_data )
-        local recycle_price = get_item_recycle_price( item_data )
+        local recycle_price = calculate_recycle_value( gapi.create_item( ItypeId.new( item_data.id ), get_standard_units( item_data ) ), item_data )
 
         local menu = UiList.new()
         menu:title( item_data.name or item_data.id )
         menu:text(
             string.format(
-                gettext( "银行余额: %s\n分类: %s\n类型: %s\n标准份额: %s\n基础价格: %s\n当前转换倍率: %s\n当前回收倍率: %s\n当前转换价: %s\n当前回收价: %s\n重量: %s\n体积: %s\n来源: %s\n\n%s" ),
+                gettext( "银行余额: %s\n分类: %s\n类型: %s\n标准份额: %s\n基础价格: %s\n当前转换倍率: %s\n当前回收倍率: %s\n当前转换价: %s\n估算回收价: %s\n重量: %s\n体积: %s\n来源: %s\n\n%s" ),
                 format_cash( who.cash, "yellow" ),
                 category_name,
                 item_data.type or "UNKNOWN",
@@ -511,13 +507,13 @@ local function open_item_detail_menu( who, machine_pos, item_id )
 
         local choice = menu:query()
         if choice == 1 then
-            perform_purchase( who, machine_pos, item_data, 1 )
+            perform_purchase( who, spawn_pos, item_data, 1 )
         elseif choice == 2 then
-            perform_purchase( who, machine_pos, item_data, 5 )
+            perform_purchase( who, spawn_pos, item_data, 5 )
         elseif choice == 3 then
             local quantity = ask_purchase_quantity( item_data )
             if quantity then
-                perform_purchase( who, machine_pos, item_data, quantity )
+                perform_purchase( who, spawn_pos, item_data, quantity )
             end
         else
             return
@@ -555,7 +551,7 @@ local function build_search_results( query_text )
     return results
 end
 
-local function open_item_list_menu( who, machine_pos, item_ids, title_text, desc_text, back_text )
+local function open_item_list_menu( who, spawn_pos, item_ids, title_text, desc_text, back_text )
     if #item_ids == 0 then
         popup_message( gettext( "没有找到可显示的物品。" ) )
         return
@@ -630,13 +626,13 @@ local function open_item_list_menu( who, machine_pos, item_ids, title_text, desc
         else
             local chosen_id = index_map[choice]
             if chosen_id then
-                open_item_detail_menu( who, machine_pos, chosen_id )
+                open_item_detail_menu( who, spawn_pos, chosen_id )
             end
         end
     end
 end
 
-local function run_search_menu( who, machine_pos )
+local function run_search_menu( who, spawn_pos )
     local query_text, ok = query_text_value(
         gettext( "搜索物品" ),
         gettext( "输入物品名称或 ID 关键词。" ),
@@ -655,7 +651,7 @@ local function run_search_menu( who, machine_pos )
 
     open_item_list_menu(
         who,
-        machine_pos,
+        spawn_pos,
         results,
         string.format( gettext( "搜索结果: %s" ), query_text ),
         string.format( gettext( "共找到 %d 个匹配项。" ), #results ),
@@ -663,7 +659,7 @@ local function run_search_menu( who, machine_pos )
     )
 end
 
-local function open_category_items_menu( who, machine_pos, category_id )
+local function open_category_items_menu( who, spawn_pos, category_id )
     local category = get_category_record( category_id )
     local item_ids = CATEGORY_ITEMS[category_id] or {}
     if #item_ids == 0 then
@@ -671,7 +667,7 @@ local function open_category_items_menu( who, machine_pos, category_id )
         return
     end
 
-    open_item_list_menu( who, machine_pos, item_ids, category.name or category.id, category.desc or "", gettext( "返回分类列表" ) )
+    open_item_list_menu( who, spawn_pos, item_ids, category.name or category.id, category.desc or "", gettext( "返回分类列表" ) )
 end
 
 local function configure_multipliers()
@@ -702,7 +698,7 @@ local function configure_multipliers()
     )
 end
 
-local function open_conversion_menu( who, machine_pos )
+local function open_conversion_menu( who, spawn_pos )
     if not META_OK or not CATEGORY_ITEMS_OK or not ITEMS_OK or total_catalog_items <= 0 then
         popup_message( gettext( "资源目录尚未生成。\n\n请先运行 mod 内附脚本生成 generated_catalog.lua、generated_catalog_category_items.lua 与 generated_catalog_items.lua。" ) )
         return
@@ -756,11 +752,11 @@ local function open_conversion_menu( who, machine_pos )
 
         local action = index_map[choice]
         if action == "__search__" then
-            run_search_menu( who, machine_pos )
+            run_search_menu( who, spawn_pos )
         elseif action == "__multiplier__" then
             configure_multipliers()
         elseif action then
-            open_category_items_menu( who, machine_pos, action )
+            open_category_items_menu( who, spawn_pos, action )
         end
     end
 end
@@ -770,27 +766,20 @@ local function open_intro_menu()
         string.format( gettext( "%s / 设备介绍" ), MACHINE_NAME ),
         "",
         gettext( "主界面共 3 个入口:" ),
-        gettext( "1. 回收物品：扫描机器周围一格（8 个相邻地格）内的物品。" ),
+        gettext( "1. 回收物品：扫描范围内物品并折现。" ),
         gettext( "2. 转换物品：分类，可搜索，可选具体物品并输入购买数量。" ),
         gettext( "3. 设备介绍：查看公式、目录格式与当前存档统计。" ),
         "",
         gettext( "价格规则:" ),
-        gettext( "- 目录中保存的是提取到的基础价格。" ),
-        gettext( "- 实际回收价 = 基础价格 × 回收倍率" ),
-        gettext( "- 实际转换价 = 基础价格 × 转换倍率" ),
-        gettext( "- 未收录或价格为 0 的物品，回收保底按 $0.01 处理" ),
-        gettext( "- 默认回收倍率 = 0.50" ),
-        gettext( "- 默认转换倍率 = 2.00" ),
-        gettext( "- 金额直接写入 / 扣除角色银行账户余额（cash）" ),
-        "",
-        gettext( "目录格式:" ),
-        gettext( "- generated_catalog.lua: 分类元数据" ),
-        gettext( "- generated_catalog_category_items.lua: category_items 分类索引表" ),
-        gettext( "- generated_catalog_items.lua: Python 提取出的独立物品数据表" ),
+        gettext( "- 回收优先读取物品自身 price(false)。" ),
+        gettext( "- 实际回收价 = 物品价值 × 回收倍率。" ),
+        gettext( "- 实际转换价 = 基础价格 × 转换倍率。" ),
+        gettext( "- 最低保底回收价 = $0.01。" ),
+        gettext( "- 默认回收倍率 = 0.50。" ),
+        gettext( "- 默认转换倍率 = 2.00。" ),
         "",
         string.format( gettext( "目录规模: %d 个分类 / %d 件物品" ), #CATEGORIES, total_catalog_items ),
         string.format( gettext( "目录生成时间: %s" ), catalog_meta.generated_at or "unknown" ),
-        string.format( gettext( "目录来源根路径: %s" ), catalog_meta.source_root or "unknown" ),
         string.format( gettext( "当前回收倍率: %s" ), format_multiplier( storage.recycle_multiplier ) ),
         string.format( gettext( "当前转换倍率: %s" ), format_multiplier( storage.buy_multiplier ) ),
         string.format( gettext( "当前列表排序: %s" ), get_sort_mode_label( storage.list_sort_mode ) ),
@@ -804,18 +793,10 @@ local function open_intro_menu()
     popup_message( table.concat( intro_lines, "\n" ) )
 end
 
-mod.use_machine_menu = function( who, item, pos )
-    ensure_storage_defaults()
-
-    if not who or not who:is_avatar() then
-        return 0
-    end
-
-    local machine_pos = pos or who:get_pos_ms()
-
+local function open_machine_menu( who, source_name, recycle_origin_pos, recycle_radius, include_origin, spawn_pos )
     while true do
         local menu = UiList.new()
-        menu:title( MACHINE_NAME )
+        menu:title( source_name )
         menu:desc_enabled( true )
         menu:text(
             string.format(
@@ -827,16 +808,16 @@ mod.use_machine_menu = function( who, item, pos )
                 format_multiplier( storage.buy_multiplier )
             )
         )
-        menu:add_w_desc( 1, gettext( "回收物品" ), gettext( "读取并回收机器周围一格内的所有物品；价格为 0 的物品也会保底按 $0.01 回收。" ) )
+        menu:add_w_desc( 1, gettext( "回收物品" ), gettext( "读取指定范围内的所有物品；优先按物品自身价值回收，最低保底 $0.01。" ) )
         menu:add_w_desc( 2, gettext( "转换物品" ), gettext( "打开分类目录，可先搜索，再按“基础价格 × 转换倍率”转换出基础游戏物品。" ) )
         menu:add_w_desc( 3, gettext( "设备介绍" ), gettext( "查看三大界面说明、价格公式、目录格式与当前存档统计。" ) )
         menu:add( 4, gettext( "关闭" ) )
 
         local choice = menu:query()
         if choice == 1 then
-            run_recycle_menu( who, machine_pos )
+            run_recycle_menu( who, recycle_origin_pos, recycle_radius, include_origin, source_name )
         elseif choice == 2 then
-            open_conversion_menu( who, machine_pos )
+            open_conversion_menu( who, spawn_pos )
         elseif choice == 3 then
             open_intro_menu()
         else
@@ -845,4 +826,26 @@ mod.use_machine_menu = function( who, item, pos )
     end
 
     return 0
+end
+
+mod.use_machine_menu = function( who, item, pos )
+    ensure_storage_defaults()
+
+    if not who or not who:is_avatar() then
+        return 0
+    end
+
+    local machine_pos = pos or who:get_pos_ms()
+    return open_machine_menu( who, MACHINE_NAME, machine_pos, RECYCLE_RADIUS, false, who:get_pos_ms() )
+end
+
+mod.use_stone_menu = function( who, item, pos )
+    ensure_storage_defaults()
+
+    if not who or not who:is_avatar() then
+        return 0
+    end
+
+    local player_pos = who:get_pos_ms()
+    return open_machine_menu( who, STONE_NAME, player_pos, 0, true, player_pos )
 end

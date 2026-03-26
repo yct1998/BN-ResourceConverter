@@ -30,6 +30,12 @@ return {
       name = locale.gettext("护甲与穿戴"),
     },
     {
+      count = 39,
+      desc = locale.gettext("瓶、桶、袋、壶与其他可装载物品。"),
+      id = "containers",
+      name = locale.gettext("容器"),
+    },
+    {
       count = 354,
       desc = locale.gettext("常规工具、电子设备与可激活装置。"),
       id = "tools",
@@ -54,7 +60,7 @@ return {
       name = locale.gettext("材料与零件"),
     },
     {
-      count = 201,
+      count = 202,
       desc = locale.gettext("车辆零件、发动机、轮组与车载结构件。"),
       id = "vehicle_parts",
       name = locale.gettext("车辆部件"),
@@ -72,6 +78,6 @@ return {
       name = locale.gettext("其他杂项"),
     },
   },
-  generated_at = "2026-03-23T09:29:39.706330+00:00",
-  source_root = "data/json/items",
+  generated_at = "2026-03-26T23:06:53.663281+00:00",
+  source_root = "E:/stuff/gamere/CBN/bn/game0/data/json/items",
 }

@@ -3,5 +3,10 @@
     "type": "item_action",
     "id": "AB_RESOURCE_CONVERTER_MENU",
     "name": { "str": "启动资源转换机" }
+  },
+  {
+    "type": "item_action",
+    "id": "AB_RESOURCE_CONVERTER_STONE_MENU",
+    "name": { "str": "启动贤者之石" }
   }
 ]

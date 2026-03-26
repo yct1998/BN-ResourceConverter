@@ -4,7 +4,7 @@
     "id": "ab_resource_converter",
     "name": "<color_light_cyan>资源转换机</color>",
     "authors": [ "收旧手机" ],
-    "description": "添加一台可建造的资源转换机。它可以回收机器周围一格的物品并把金额计入银行账号，你能购买游戏本体中的大部分物品。",
+    "description": "添加一台可建造的资源转换机。它可以回收机器周围一格的物品并把金额计入银行账号，你能购买游戏本体中的大部分物品。新加了一个贤者之石，随身回收转换。",
     "version": "20260323",
     "category": "misc_additions",
     "lua_api_version": 2,
