@@ -437,14 +437,27 @@ def is_stackable_item(resolved: dict) -> bool:
     return bool(resolved.get("stackable")) or resolved.get("type") == "AMMO"
 
 
+def is_charge_based_item(resolved: dict) -> bool:
+    return text_to_string(resolved.get("type")) == "AMMO"
+
+
 def default_units(resolved: dict) -> int:
     if isinstance(resolved.get("count"), int) and resolved["count"] > 0:
         return int(resolved["count"])
-    if is_stackable_item(resolved):
+    if is_charge_based_item(resolved):
         for field in ("charges", "initial_charges", "max_charges"):
             if isinstance(resolved.get(field), int) and resolved[field] > 0:
                 return int(resolved[field])
     return 1
+
+
+def spawn_charges(resolved: dict) -> int:
+    if is_charge_based_item(resolved):
+        return max(0, default_units(resolved))
+    for field in ("charges", "initial_charges"):
+        if isinstance(resolved.get(field), int) and resolved[field] >= 0:
+            return int(resolved[field])
+    return 0
 
 
 def classify_item(resolved: dict) -> str:
@@ -610,6 +623,8 @@ def build_catalog() -> tuple[dict, dict, dict]:
             "weight": text_to_string(resolved.get("weight")),
             "volume": text_to_string(resolved.get("volume")),
             "default_units": max(1, default_units(resolved)),
+            "charge_based": is_charge_based_item(resolved),
+            "spawn_charges": max(0, spawn_charges(resolved)),
             "stackable": is_stackable_item(resolved),
             "source": text_to_string(resolved.get("_path")),
             "copy_from": text_to_string(resolved.get("_copy_from")),

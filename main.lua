@@ -171,6 +171,35 @@ local function get_standard_units( item_data )
     return math.floor( units )
 end
 
+local function get_spawn_charges( item_data )
+    local charges = tonumber( item_data and item_data.spawn_charges ) or 0
+    if charges < 0 then
+        charges = 0
+    end
+    return math.floor( charges )
+end
+
+local function create_catalog_item( item_data )
+    if not item_data or not item_data.id then
+        return nil
+    end
+
+    local create_count = ( item_data.charge_based and get_standard_units( item_data ) ) or 1
+    local detached_item = gapi.create_item( ItypeId.new( item_data.id ), create_count )
+    if not detached_item then
+        return nil
+    end
+
+    local target_charges = get_spawn_charges( item_data )
+    pcall( function()
+        if tonumber( detached_item.charges ) ~= target_charges then
+            detached_item.charges = target_charges
+        end
+    end )
+
+    return detached_item
+end
+
 local function get_item_buy_price( item_data )
     local base_price = tonumber( item_data and item_data.price ) or 0
     return math.max( 0, math.floor( base_price * ( tonumber( storage.buy_multiplier ) or 2.0 ) ) )
@@ -527,8 +556,7 @@ local function perform_purchase( who, spawn_pos, item_data, bundles )
     local dropped_count = 0
 
     for _ = 1, bundles do
-        local spawn_count = item_data.stackable and get_standard_units( item_data ) or 1
-        local detached_item = gapi.create_item( ItypeId.new( item_data.id ), spawn_count )
+        local detached_item = create_catalog_item( item_data )
         if detached_item then
             local destination = add_or_drop_item( who, spawn_pos, detached_item )
             if destination == "ground" then
@@ -600,7 +628,7 @@ local function open_item_detail_menu( who, spawn_pos, item_id )
 
     while true do
         local buy_price = get_item_buy_price( item_data )
-        local recycle_price = calculate_recycle_value( gapi.create_item( ItypeId.new( item_data.id ), get_standard_units( item_data ) ), item_data )
+        local recycle_price = calculate_recycle_value( create_catalog_item( item_data ), item_data )
 
         local menu = UiList.new()
         menu:title( item_data.name or item_data.id )

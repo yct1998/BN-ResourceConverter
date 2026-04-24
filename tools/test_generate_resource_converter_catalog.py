@@ -41,6 +41,21 @@ class CatalogGenerationTests(unittest.TestCase):
         self.assertEqual("ammo", items["glass_shard"]["category"])
         self.assertGreater(items["glass_shard"]["price"], 0)
 
+    def test_only_charge_based_items_use_spawn_charges(self):
+        module = load_generator_module()
+        module.build_registry()
+
+        meta, category_items, items = module.build_catalog()
+
+        self.assertTrue(items["battery"]["charge_based"])
+        self.assertEqual(100, items["battery"]["spawn_charges"])
+
+        self.assertFalse(items["2x4"]["charge_based"])
+        self.assertEqual(0, items["2x4"]["spawn_charges"])
+
+        self.assertFalse(items["UPS_off"]["charge_based"])
+        self.assertEqual(0, items["UPS_off"]["spawn_charges"])
+
 
 if __name__ == "__main__":
     unittest.main()
