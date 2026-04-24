@@ -33,6 +33,22 @@ local MACHINE_NAME = gettext( "资源转换机" )
 local STONE_NAME = gettext( "贤者之石" )
 local RECYCLE_RADIUS = 1
 local PAGE_SIZE = 30
+local FIXTURE_OFFERS = {
+    {
+        id = "fixture_toilet",
+        furn_id = "f_toilet",
+        name = gettext( "购买马桶" ),
+        desc = gettext( "直接在脚下放置一个马桶，适合承接液体。价格：$50.00" ),
+        price = 5000,
+    },
+    {
+        id = "fixture_bathtub",
+        furn_id = "f_bathtub",
+        name = gettext( "购买浴缸" ),
+        desc = gettext( "直接在脚下放置一个浴缸，适合承接更多液体。价格：$200.00" ),
+        price = 20000,
+    },
+}
 
 local total_catalog_items = 0
 local category_name_by_id = {}
@@ -165,6 +181,113 @@ local function get_sort_mode_label( sort_mode )
         return gettext( "价格" )
     end
     return gettext( "字母" )
+end
+
+local function get_fixture_name( fixture_offer )
+    return tostring( fixture_offer and fixture_offer.name or gettext( "未命名家具" ) )
+end
+
+local function can_place_fixture_at( pos )
+    local here = gapi.get_map()
+    local furn_id = here:get_furn_at( pos )
+    if furn_id and furn_id.str_id and furn_id:str_id():str() ~= "f_null" then
+        return false, gettext( "脚下已经有家具，无法直接放置。" )
+    end
+
+    local ter = here:get_ter_at( pos ):obj()
+    if ter and ter:has_flag( "IMPASSABLE" ) then
+        return false, gettext( "脚下地形无法放置家具。" )
+    end
+
+    return true, nil
+end
+
+local function perform_fixture_purchase( who, pos, fixture_offer )
+    local final_cost = tonumber( fixture_offer and fixture_offer.price ) or 0
+    if final_cost <= 0 then
+        popup_message( gettext( "该家具当前没有可用的价格。" ) )
+        return
+    end
+
+    if who.cash < final_cost then
+        popup_message(
+            string.format(
+                gettext( "银行账户余额不足。\n\n当前余额: %s\n所需金额: %s" ),
+                format_cash( who.cash, "yellow" ),
+                format_cash( final_cost, "light_red" )
+            )
+        )
+        return
+    end
+
+    local can_place, reason = can_place_fixture_at( pos )
+    if not can_place then
+        popup_message( reason or gettext( "当前无法在脚下放置该家具。" ) )
+        return
+    end
+
+    local fixture_name = get_fixture_name( fixture_offer )
+    local confirm_text = string.format(
+        gettext( "确认购买以下容器家具？\n\n家具: %s\n价格: %s\n支付后余额: %s\n放置位置: 玩家脚下" ),
+        fixture_name,
+        format_cash( final_cost, "light_green" ),
+        format_cash( who.cash - final_cost, "yellow" )
+    )
+    if not confirm_message( confirm_text ) then
+        return
+    end
+
+    gapi.get_map():set_furn_at( pos, FurnId.new( fixture_offer.furn_id ):int_id() )
+    who.cash = who.cash - final_cost
+    storage.total_purchased_bundles = storage.total_purchased_bundles + 1
+    storage.total_spent_money = storage.total_spent_money + final_cost
+
+    popup_message(
+        string.format(
+            gettext( "已购买并放置：%s\n花费: %s" ),
+            fixture_name,
+            format_cash( final_cost, "light_green" )
+        )
+    )
+end
+
+local function open_fixture_purchase_menu( who, pos )
+    while true do
+        local menu = UiList.new()
+        menu:title( gettext( "购买容器家具" ) )
+        menu:desc_enabled( true )
+        menu:text(
+            string.format(
+                gettext( "银行余额: %s\n这些家具会直接放置在玩家脚下，用来承接液体，避免洒落。" ),
+                format_cash( who.cash, "yellow" )
+            )
+        )
+
+        local menu_index = 1
+        local index_map = {}
+        for _, fixture_offer in ipairs( FIXTURE_OFFERS ) do
+            index_map[menu_index] = fixture_offer
+            menu:add_w_desc(
+                menu_index,
+                string.format( gettext( "%s (%s)" ), get_fixture_name( fixture_offer ), format_cash( fixture_offer.price, "light_green" ) ),
+                fixture_offer.desc or ""
+            )
+            menu_index = menu_index + 1
+        end
+
+        local back_index = menu_index
+        menu:add( back_index, gettext( "返回" ) )
+
+        local choice = menu:query()
+        if choice < 1 or choice == back_index then
+            return
+        end
+
+        local fixture_offer = index_map[choice]
+        if fixture_offer then
+            perform_fixture_purchase( who, pos, fixture_offer )
+        end
+    end
 end
 
 local function sort_item_ids( item_ids, sort_mode )
@@ -813,6 +936,8 @@ local function open_machine_menu( who, source_name, recycle_origin_pos, recycle_
         menu:add_w_desc( 3, gettext( "设备介绍" ), gettext( "查看三大界面说明、价格公式、目录格式与当前存档统计。" ) )
         menu:add( 4, gettext( "关闭" ) )
 
+        menu:add_w_desc( 5, gettext( "购买容器家具" ), gettext( "直接购买并在脚下放置马桶或浴缸，避免液体洒落。" ) )
+
         local choice = menu:query()
         if choice == 1 then
             run_recycle_menu( who, recycle_origin_pos, recycle_radius, include_origin, source_name )
@@ -820,6 +945,8 @@ local function open_machine_menu( who, source_name, recycle_origin_pos, recycle_
             open_conversion_menu( who, spawn_pos )
         elseif choice == 3 then
             open_intro_menu()
+        elseif choice == 5 then
+            open_fixture_purchase_menu( who, spawn_pos )
         else
             break
         end
