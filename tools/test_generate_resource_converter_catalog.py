@@ -30,6 +30,17 @@ class CatalogGenerationTests(unittest.TestCase):
         self.assertEqual("AMMO", items["battery"]["type"])
         self.assertEqual("ammo", items["battery"]["category"])
 
+    def test_zero_price_material_ammo_items_are_included(self):
+        module = load_generator_module()
+        module.build_registry()
+
+        meta, category_items, items = module.build_catalog()
+
+        self.assertIn("glass_shard", items)
+        self.assertEqual("AMMO", items["glass_shard"]["type"])
+        self.assertEqual("ammo", items["glass_shard"]["category"])
+        self.assertGreater(items["glass_shard"]["price"], 0)
+
 
 if __name__ == "__main__":
     unittest.main()

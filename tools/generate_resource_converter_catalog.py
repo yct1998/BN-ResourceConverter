@@ -265,6 +265,12 @@ def is_buyable_type_name(type_name: str) -> bool:
     return text_to_string(type_name) in BUYABLE_TYPES
 
 
+def is_zero_price_material_ammo_candidate(resolved: dict) -> bool:
+    item_type = text_to_string(resolved.get("type"))
+    category = text_to_string(resolved.get("category")).lower()
+    return item_type == "AMMO" and category.startswith("scrap_")
+
+
 def should_replace_registry_entry(existing: dict, candidate: dict) -> bool:
     existing_type = existing.get("type")
     candidate_type = candidate.get("type")
@@ -515,7 +521,7 @@ def is_buyable(key: str, resolved: dict) -> bool:
     if "PSEUDO" in flags:
         return False
 
-    if resolve_price(key, "price") <= 0:
+    if resolve_price(key, "price") <= 0 and not is_zero_price_material_ammo_candidate(resolved):
         return False
 
     return True
@@ -585,6 +591,10 @@ def build_catalog() -> tuple[dict, dict, dict]:
 
         base_price = resolve_price(key, "price")
         postapoc_price = resolve_price(key, "price_postapoc")
+        if base_price <= 0 and is_zero_price_material_ammo_candidate(resolved):
+            base_price = 1
+        if postapoc_price <= 0 and is_zero_price_material_ammo_candidate(resolved):
+            postapoc_price = 1
         category_id = classify_item(resolved)
         item_name = name_to_string(resolved.get("name")) or key
         item_desc = text_to_string(resolved.get("description"))

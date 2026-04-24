@@ -12,7 +12,7 @@ return {
       name = locale.gettext("枪械与远程"),
     },
     {
-      count = 388,
+      count = 395,
       desc = locale.gettext("子弹、电池、燃料弹药与可堆叠弹药。"),
       id = "ammo",
       name = locale.gettext("弹药"),
@@ -78,6 +78,6 @@ return {
       name = locale.gettext("其他杂项"),
     },
   },
-  generated_at = "2026-04-24T13:02:10.945576+00:00",
+  generated_at = "2026-04-24T13:16:45.395353+00:00",
   source_root = "E:/stuff/gamere/CBN/bn/game0/data/json/items",
 }
