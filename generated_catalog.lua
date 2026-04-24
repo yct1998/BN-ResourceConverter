@@ -6,25 +6,25 @@
 return {
   categories = {
     {
-      count = 409,
+      count = 423,
       desc = locale.gettext("枪械、弓弩与其他远程武器。"),
       id = "weapons_ranged",
       name = locale.gettext("枪械与远程"),
     },
     {
-      count = 334,
+      count = 388,
       desc = locale.gettext("子弹、电池、燃料弹药与可堆叠弹药。"),
       id = "ammo",
       name = locale.gettext("弹药"),
     },
     {
-      count = 212,
+      count = 213,
       desc = locale.gettext("弹匣、供弹机构与相关附件。"),
       id = "magazines",
       name = locale.gettext("弹匣与供弹"),
     },
     {
-      count = 1197,
+      count = 1207,
       desc = locale.gettext("护具、服装、携行穿戴与宠物护甲。"),
       id = "armor",
       name = locale.gettext("护甲与穿戴"),
@@ -36,19 +36,19 @@ return {
       name = locale.gettext("容器"),
     },
     {
-      count = 354,
+      count = 361,
       desc = locale.gettext("常规工具、电子设备与可激活装置。"),
       id = "tools",
       name = locale.gettext("工具与电子"),
     },
     {
-      count = 935,
+      count = 941,
       desc = locale.gettext("食物、饮料、药品和一般消耗品。"),
       id = "consumables",
       name = locale.gettext("食物与药品"),
     },
     {
-      count = 271,
+      count = 279,
       desc = locale.gettext("配方书、技能书与其他读物。"),
       id = "books",
       name = locale.gettext("书籍与资料"),
@@ -60,24 +60,24 @@ return {
       name = locale.gettext("材料与零件"),
     },
     {
-      count = 202,
+      count = 210,
       desc = locale.gettext("车辆零件、发动机、轮组与车载结构件。"),
       id = "vehicle_parts",
       name = locale.gettext("车辆部件"),
     },
     {
-      count = 109,
+      count = 110,
       desc = locale.gettext("仿生安装物与高级技术物资。"),
       id = "bionics",
       name = locale.gettext("仿生与高科技"),
     },
     {
-      count = 723,
+      count = 724,
       desc = locale.gettext("其余可购买、可回收但不适合归入上列分类的物品。"),
       id = "misc",
       name = locale.gettext("其他杂项"),
     },
   },
-  generated_at = "2026-03-26T23:06:53.663281+00:00",
+  generated_at = "2026-04-24T13:02:10.945576+00:00",
   source_root = "E:/stuff/gamere/CBN/bn/game0/data/json/items",
 }
